@@ -9,6 +9,8 @@ passport.use(new localStrategy(User.authenticate()));
 // const configuration = require('../config/cloudnary')
 // configuration();
 // Function to register a new user
+
+
 async function registerUser(req, res) {
 
   try {
@@ -55,7 +57,7 @@ async function loginUser(req, res) {
 
 async function updateProfilePicture(req, res) {
   try {
-    const userId = req.params.id;
+    const userId = req.user._id;
     const user = await User.findById({ _id: userId });
 
     if (!user) {
@@ -77,7 +79,7 @@ async function updateProfilePicture(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    const _id = req.params;
+    const _id = req.user._id;
 
     if (_id == null) {
       res.send("user not found");
@@ -94,7 +96,7 @@ async function updateProfile(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.user?._id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

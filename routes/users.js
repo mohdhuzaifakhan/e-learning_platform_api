@@ -9,25 +9,29 @@ const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 /* create users listing. */
-router.get('/register',registerUser);
+router.post('/register', registerUser);
 
 /* get user listing. */
 router.get('/login',passport.authenticate('local', {
-    failureRedirect: '/users/check-login',
+  failureRedirect: '/users/check-login',
     successRedirect: '/'
 }),loginUser);
-router.get('/check-login',)
 
-router.get('/profile',isLoggedIn,function(req,res){
-  res.send("Welcome to profile")
+router.get('/check-login', function (req, res) {
+  res.send("Please login first")
 })
 
-router.get('/profile/:_id',getUser)
+
+router.get('/profile',isLoggedIn,function(req,res){
+  res.json({ user: req.user })
+})
 
 //update profile by id
-router.put('/profile/:_id',updateProfile)
-router.put('/profile_pic/:id',upload.single('file'),updateProfilePicture)
+router.put('/profile/', isLoggedIn, updateProfile)
+router.put('/profile_pic', upload.single('file'), updateProfilePicture)
 
+
+//Logout route
 router.get('/logout', (req, res,next) => {
   req.logout(function(err){
     if(!err){
@@ -39,6 +43,8 @@ router.get('/logout', (req, res,next) => {
   });
 });
 
+
+//Middleware for checking the user is logged in or not
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
         return next()

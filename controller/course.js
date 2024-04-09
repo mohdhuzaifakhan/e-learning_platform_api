@@ -5,10 +5,10 @@ const Course = require('../models/course');
 // Function to create a new course
 async function createCourse(req, res) {
   try {
-    if(!req.user){
+    if (!req.user) {
       return res.status(404).json({ message: 'You are not authorized to create a course' });
     }
-    const { title, description, category, level} = req.body;
+    const { title, description, category, level } = req.body;
     const newCourse = await Course.create({ title, description, category, level, createdBy: req.user._id });
     newCourse.save()
     res.status(201).json(newCourse);
@@ -35,7 +35,7 @@ async function updateCourseById(req, res) {
     }
     const userId = req.user._id
     const createdById = course.createdBy
-    if(!req.user){
+    if (!req.user) {
       return res.status(404).json({ message: 'You are not logged in to update this course' });
     }
     if (!userId.equals(createdById)) {
@@ -62,15 +62,6 @@ async function updateCourseById(req, res) {
 }
 
 
-// async function getCourses(req, res) {
-//   try {
-//     const courses = await Course.find().limit(20);
-//     res.json(courses);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// }
-
 
 async function deleteCourseById(req, res) {
   try {
@@ -81,13 +72,13 @@ async function deleteCourseById(req, res) {
 
     const userId = req.user._id
     const createdById = course.createdBy
-    if(!req.user){
+    if (!req.user) {
       return res.status(404).json({ message: 'You are not logged in to update this course' });
     }
     if (!userId.equals(createdById)) {
       return res.status(404).json({ message: 'You are not authorized to update this course' });
     }
-    const result = await Course.deleteOne({ _id:req.params.id });
+    const result = await Course.deleteOne({ _id: req.params.id });
 
     if (result.deletedCount === 1) {
       res.json({ message: 'Course deleted successfully' });

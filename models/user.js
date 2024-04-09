@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
-  firstName:{
-    type:String,
-    trim:true
+  firstName: {
+    type: String,
+    trim: true
   },
-  lastName:{
-    type:String,
-    trim:true
+  lastName: {
+    type: String,
+    trim: true
   },
   username: {
     type: String,
